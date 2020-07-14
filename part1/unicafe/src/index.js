@@ -2,6 +2,14 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const Part = (props) => {
+  return (
+    <div>
+      {props.attribute} {props.value}
+    </div>
+  )
+}
+
 const Statistics = (props) => {
 
   const {good,neutral,bad,all}= props
@@ -14,13 +22,14 @@ const Statistics = (props) => {
       </div>
     )
   }
+
   return (
   <div>
     <h1>statistics</h1>
-    <p>good {good}</p>
-    <p>neutral {neutral}</p>
-    <p>bad {bad}</p>
-    <p>all {all}</p>
+    <Part attribute= 'good' value = {good} />
+    <Part attribute= 'neutral' value = {neutral} />
+    <Part attribute= 'bad' value = {bad} />
+    <Part attribute= 'all' value = {all} />
     <p>average {(good-bad)/all}</p>
     <p>positive {100*good/all} %</p>
   </div>  
