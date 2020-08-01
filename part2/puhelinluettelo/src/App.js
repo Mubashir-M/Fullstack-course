@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import noteService from './services/notes'
+
+
+
 
 const Filter = ({ newSearch, onSearchChange }) => {
   
@@ -11,15 +14,16 @@ const Filter = ({ newSearch, onSearchChange }) => {
 }
 
 
-const Persons = ({persons,newSearch}) => {
+const Persons = ({persons,newSearch,DeleteContact}) => {
 
   if (newSearch.length > 0){
     const filteredPersons = persons.filter(person =>person.name.toLowerCase().includes(newSearch.toLowerCase()))
-   
-    return filteredPersons.map(person=> <p key={person.name}>{person.name} {person.number}</p>)
+    
+    return filteredPersons.map(person=> <p key={person.name}>{person.name} {person.number} <button onClick={() =>DeleteContact(person)} >delete</button></p>)
 
   } else {
-    return persons.map(person=> <p key={person.name}>{person.name} {person.number}</p>)
+    
+    return persons.map(person=> <p key={person.name}>{person.name} {person.number}<button onClick={() =>DeleteContact(person)} >delete</button></p>)
   }
 }
 
@@ -49,22 +53,21 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [newNumber,setNewNumber] = useState('')
   const [newSearch,SetnewSearch] = useState('')
+
   
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    noteService
+      .getAll()
+      .then(initialNotes => {
+        setPersons(initialNotes)
       })
   },[])
-  console.log('Render', persons.length,'persons')
+  
+
   const addName = (event) => {
     event.preventDefault()
-   
-    
-    if (persons.filter(person => person.name === newName).length>0){
+  if (persons.filter(person => person.name === newName).length>0){
       
         alert(`${newName} is already added to phonebook`)
       
@@ -75,29 +78,57 @@ const App = () => {
     {
       const newPerson = {
         name: newName,
-        number: newNumber,
+        number: newNumber
       
       }
+
+     
+      
+      noteService
+      .create(newPerson)
+      .then(returnedNote => {
+        setPersons(persons.concat(returnedNote))
+        SetnewSearch('')
+        setNewNumber('')
+      })
+
+     
+    }
+  }
+
+
+  const DeleteContact = (contact) => {
     
-      setPersons(persons.concat(newPerson))
-      setNewName('')
-      setNewNumber('')
+    const result = window.confirm (`Delete ${contact.name} ?`)
+   
+      if (result === true) {
+        noteService
+        .remove(contact.id)
+        .then(response => {
+          console.log(response)
+          const posts = persons.filter(person => person.name !== contact.name)
+          setPersons(posts)
+          
+        })
+        .catch(error => {
+          console.log('fail')
+        })
     }
   }
 
   
 const handleNameChange = (event) => {
-    console.log(event.target.value)
+   // console.log(event.target.value)
     setNewName(event.target.value)
   }
 
   const handleNumberChange = (event) => {
-    console.log(event.target.value)
+    //console.log(event.target.value)
     setNewNumber(event.target.value)
   }
 
   const handleSearchChange = (event) =>{
-    console.log(event.target.value)
+   // console.log(event.target.value)
     SetnewSearch(event.target.value)
   }
 
@@ -111,7 +142,7 @@ const handleNameChange = (event) => {
       <h2>Add a new</h2>
       <Personform addName = {addName} newName= {newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} newSearch={newSearch}/>
+      <Persons persons={persons} newSearch={newSearch} DeleteContact= {DeleteContact}/>
 
     </div>
   )
