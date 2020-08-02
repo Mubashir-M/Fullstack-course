@@ -1,8 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import noteService from './services/notes'
+import './index.css'
 
 
+const Notification = ({errorMessage,successMessage }) => {
+  if (errorMessage === null && successMessage === null) {
+    return null
+  } else if (successMessage !== null) {
+    return (
+      <div className="success">
+        {successMessage}
+      </div>
+    )
+  } else {
+    return (
+      <div className="error">
+        {errorMessage}
+      </div>
+    )
+  }
 
+  
+}
 
 const Filter = ({ newSearch, onSearchChange }) => {
   
@@ -53,7 +72,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [newNumber,setNewNumber] = useState('')
   const [newSearch,SetnewSearch] = useState('')
-
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [successMessage,setsuccessMessage] = useState(null)
   
   useEffect(() => {
     console.log('effect')
@@ -67,16 +87,39 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
+    
   if (persons.filter(person => person.name === newName).length>0){
       
         const note = persons.find(i => i.name===newName)
         const changedPersons = {...note, number: newNumber}
         const id = note.id
+
         noteService
         .update(id,changedPersons)
         .then(returnedNote => {
           setPersons(persons.map(note => note.id !== id ? note : returnedNote)) 
+          setNewName('')
+          setNewNumber('')
+          
+          setsuccessMessage(`Updated ${note.name}'s contact number!`)
+          setTimeout(() => {
+            setsuccessMessage(null)
+          }, 5000)
+          
         })
+        .catch(error => {
+          setErrorMessage(
+            `Information of ${newName} has already been removed from server`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+          setNewName('')
+          setNewNumber('')
+          
+          
+        })
+        
       
     } else if (newName.length===0){
       alert (`Name is required for adding to the phonebook`)
@@ -89,17 +132,23 @@ const App = () => {
       
       }
 
-     
-      
       noteService
       .create(newPerson)
       .then(returnedNote => {
         setPersons(persons.concat(returnedNote))
-        SetnewSearch('')
+        setNewName('')
         setNewNumber('')
+        setsuccessMessage(`Added ${returnedNote.name} to contacts`)
+        
+        setTimeout(() => {
+          setsuccessMessage(null)
+        }, 5000)
       })
-
-     
+      .catch(error => {
+        console.log('failed to add to contacts')
+        
+        
+      })
     }
   }
 
@@ -115,10 +164,16 @@ const App = () => {
           console.log(response)
           const posts = persons.filter(person => person.name !== contact.name)
           setPersons(posts)
+          setsuccessMessage(`Deleted ${contact.name} from contacts!`)
+        
+          setTimeout(() => {
+            setsuccessMessage(null)
+          }, 5000)
           
         })
         .catch(error => {
-          console.log('fail')
+          console.log('failed to delete contact')
+          
         })
     }
   }
@@ -143,12 +198,13 @@ const handleNameChange = (event) => {
   
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification errorMessage={errorMessage} successMessage={successMessage}/>
       <Filter newsearch={newSearch} onSearchChange = {handleSearchChange}/>
       
-      <h2>Add a new</h2>
+      <h1>Add a new</h1>
       <Personform addName = {addName} newName= {newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange}/>
-      <h2>Numbers</h2>
+      <h1>Numbers</h1>
       <Persons persons={persons} newSearch={newSearch} DeleteContact= {DeleteContact}/>
 
     </div>
