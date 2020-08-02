@@ -69,7 +69,14 @@ const App = () => {
     event.preventDefault()
   if (persons.filter(person => person.name === newName).length>0){
       
-        alert(`${newName} is already added to phonebook`)
+        const note = persons.find(i => i.name===newName)
+        const changedPersons = {...note, number: newNumber}
+        const id = note.id
+        noteService
+        .update(id,changedPersons)
+        .then(returnedNote => {
+          setPersons(persons.map(note => note.id !== id ? note : returnedNote)) 
+        })
       
     } else if (newName.length===0){
       alert (`Name is required for adding to the phonebook`)
