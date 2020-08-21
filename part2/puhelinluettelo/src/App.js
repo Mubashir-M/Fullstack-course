@@ -108,9 +108,15 @@ const App = () => {
           
         })
         .catch(error => {
-          setErrorMessage(
-            `Information of ${newName} has already been removed from server`
-          )
+          
+           if (error.response.data.error === undefined){
+            setErrorMessage(
+              `Information of ${newName} has already been removed from server`
+            )
+           } else {
+             setErrorMessage(`${error.response.data.error}`)
+           }
+            
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
@@ -126,6 +132,7 @@ const App = () => {
     }
     else
     {
+
       const newPerson = {
         name: newName,
         number: newNumber
@@ -145,7 +152,14 @@ const App = () => {
         }, 5000)
       })
       .catch(error => {
-        console.log('failed to add to contacts')
+
+        console.log(error.response.data)
+        setErrorMessage(`${error.response.data.error}`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        setNewName('')
+        setNewNumber('')
         
         
       })
@@ -158,6 +172,7 @@ const App = () => {
     const result = window.confirm (`Delete ${contact.name} ?`)
    
       if (result === true) {
+
         noteService
         .remove(contact.id)
         .then(response => {
@@ -173,6 +188,7 @@ const App = () => {
         })
         .catch(error => {
           console.log('failed to delete contact')
+
           
         })
     }

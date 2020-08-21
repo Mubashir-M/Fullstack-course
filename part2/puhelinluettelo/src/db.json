@@ -8,32 +8,22 @@
     {
       "name": "Ada Lovelace",
       "number": "043 346 132424",
-      "id": 3
+      "id": 2
     },
     {
       "name": "Tim Barry",
       "number": "049324234",
-      "id": 4
+      "id": 3
     },
     {
       "name": "Johan Liebert",
       "number": "040 873 2324",
-      "id": 5
+      "id": 4
     },
     {
       "name": "Terra Ki",
       "number": "043 234 23423",
-      "id": 6
-    },
-    {
-      "name": "aapeli",
-      "number": "33",
-      "id": 7
-    },
-    {
-      "name": "aapeli",
-      "number": "88",
-      "id": 8
+      "id": 5
     }
   ]
 }
