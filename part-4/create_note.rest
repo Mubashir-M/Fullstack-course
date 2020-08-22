@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-  "title": "Leviathan",
-  "author": "Giston",
-  "url" : "consta.com",
-  "likes": 9
+  "title": "Mark Thomp",
+  "author": "Zink",
+  "url" : "Dorlei.com",
+  "likes": 0
 }
