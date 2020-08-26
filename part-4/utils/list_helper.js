@@ -44,32 +44,27 @@ const mostBlogs = (blogs) => {
     return null
   }
 
-  var result= blogs[0]
+  const authorsAndBlog_count = _(blogs).groupBy('author').map((blog,id) => ({
+    author:id,
+    blogs: blog.length })).value()
 
-  const groupByAuthors=  _.sortBy(_.groupBy(blogs,'author'), (blog) =>  {
-    return blog.length
-  })
-
-
-  var count = 0
-  var i = 0
-
-  for (;i<groupByAuthors.length;i++){
-    if (groupByAuthors[i].length> count){
-      result = groupByAuthors[i][0]
-      count = groupByAuthors[i].length
-    }
-  }
-
-  result = {
-    author:result.author,
-    blogs:count
-  }
+  const result = _.last(_.sortBy(authorsAndBlog_count,'blogs'))
   return result
 }
-// mostLikes()
-// groupby authors and map to (author,likeSum) using reduce for each group
+
+const mostLikes = (blogs) => {
+  if (blogs.length === 0){
+    return null
+  }
+  const authorsAndLikes = _(blogs).groupBy('author').map((blog,id) => ({
+    author:id,
+    likes: _.sumBy(blog,'likes') })).value()
+
+  const result = _.last(_.sortBy(authorsAndLikes,'likes'))
+
+  return result
+}
 
 module.exports = {
-  dummy,totalLikes,favoriteBlog,mostBlogs//mostLikes
+  dummy,totalLikes,favoriteBlog,mostBlogs,mostLikes
 }

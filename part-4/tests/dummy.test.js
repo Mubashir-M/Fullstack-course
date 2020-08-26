@@ -45,9 +45,9 @@ describe('favorite blog', () => {
   test('when list has multiple blogs,equals the blog with highest likes', () => {
     const result = listHelper.favoriteBlog(listWithMultipleBlogs)
     const expected = {
-      title: listWithMultipleBlogs[5].title,
-      author: listWithMultipleBlogs[5].author,
-      likes: listWithMultipleBlogs[5].likes
+      title: 'Type wars',
+      author: 'Robert C. Martin',
+      likes: 22
     }
     console.log('here is result',result)
     console.log('here is expected', expected)
@@ -60,12 +60,25 @@ describe ('most frequent author', () => {
   test('when list has multiple blogs, equals the author with highest number of blogs', () => {
     const result= listHelper.mostBlogs(listWithMultipleBlogs)
     const expected = {
-      author:listWithMultipleBlogs[3].author,
+      author:'Robert C. Martin',
       blogs:3
     }
 
     console.log('here is result',result)
     console.log('here is expected', expected)
+    expect(result).toEqual(expected)
+  })
+})
+
+describe('most liked author', () => {
+
+  test('when list has multiple authors, equals author with most cumulative likes', () => {
+    const result = listHelper.mostLikes(listWithMultipleBlogs)
+    const expected = {
+      author : 'Robert C. Martin',
+      likes: 32
+    }
+
     expect(result).toEqual(expected)
   })
 })
