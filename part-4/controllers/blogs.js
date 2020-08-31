@@ -1,29 +1,36 @@
 const notesRouter = require('express').Router()
 const Blog = require('../models/blog')
-const logger = require ('../utils/logger')
+//const logger = require ('../utils/logger')
 
 
-notesRouter.get('/', (request, response,next) => {
-  console.log('INSIDE GET FUNCTION!')
-  Blog
-    .find({})
-    .then(blog => {
-      logger.info('Completed get successfully!')
-      response.json(blog)
-    })
-    .catch(error => next(error))
+notesRouter.get('/', async (request, response) => {
+
+  const blogs = await Blog.find({})
+  response.json(blogs.map(blog => blog.toJSON()))
 })
 
-notesRouter.post('/', (request, response,next) => {
-  const blog = new Blog(request.body)
+notesRouter.post('/', async (request, response) => {
 
-  blog
-    .save()
-    .then(result => {
-      logger.info('Completed post successfully!')
-      response.status(201).json(result)
-    })
-    .catch(error => next(error))
+  if (request.body.likes === undefined){
+    const blog = new Blog ({ title:request.body.title,author:request.body.author,url:request.body.url,likes:0 })
+    const savedBlog = await blog.save()
+    response.json(savedBlog.toJSON())
+  } else {
+    const blog = new Blog(request.body)
+
+    const savedBlog = await blog.save()
+    response.json(savedBlog.toJSON())
+  }
+
+})
+
+notesRouter.get('/:id', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  if (blog) {
+    response.json(blog.toJSON())
+  } else {
+    response.status(404).end()
+  }
 })
 
 module.exports = notesRouter
