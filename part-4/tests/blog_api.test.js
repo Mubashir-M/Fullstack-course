@@ -11,11 +11,10 @@ const { initialBlogs } = require('./test_helper')
 beforeEach(async () => {
   await Blog.deleteMany({})
 
-  let blogObject = new Blog(helper.initialBlogs[0])
-  await blogObject.save()
-
-  blogObject = new Blog(helper.initialBlogs[1])
-  await blogObject.save()
+  const blogObjects = helper.initialBlogs
+    .map(blog => new Blog(blog))
+  const promiseArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseArray)
 })
 
 
@@ -28,22 +27,15 @@ test('correct amount of blogs are returned as json', async () => {
   expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
-test('blogs unique identification parameter should be "id"', async () => {
+test('blogs unique identification parameter should be id', async () => {
   const response =await api.get('/api/blogs')
 
-  const checkID = () => {
-    let index = 0
-    while (index<response.body.length){
-      if (response.body[index].id === null){
-        return null
-      }
-      index++
-    }
-
-    return true
+  let index = 0
+  while (index<response.body.length){
+    expect(response.body[index].id).toBeDefined()
+    index++
   }
 
-  expect(checkID).toBeDefined()
 })
 
 test('A blog with correct contents is created', async () => {
@@ -81,7 +73,7 @@ test('when blog without likes created, default should be 0', async () => {
 
 })
 
-test('when blog without title or url created, status code should be "400 Bad request', async () => {
+test('when blog without title or url created, status code should be 400 Bad request', async () => {
   const newBlog = new Blog({ title:'Useless Jargon',likes:11 })
 
   await api

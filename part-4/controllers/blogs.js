@@ -1,7 +1,5 @@
 const notesRouter = require('express').Router()
 const Blog = require('../models/blog')
-//const logger = require ('../utils/logger')
-
 
 notesRouter.get('/', async (request, response) => {
 
@@ -32,5 +30,25 @@ notesRouter.get('/:id', async (request, response) => {
     response.status(404).end()
   }
 })
+
+notesRouter.delete('/:id', async (request,response) => {
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
+})
+
+notesRouter.put('/:id', async (request,response) => {
+  const body = request.body
+
+  const blog = {
+    title : body.title,
+    author: body.author,
+    url : body.url,
+    likes: body.likes
+  }
+
+  await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  response.json(blog)
+})
+
 
 module.exports = notesRouter
