@@ -2,7 +2,7 @@ var _ = require('lodash')
 
 const dummy = (blogs) => {
   // ...
-  //console.log('here is blog data:',blogs)
+  console.log('here is blog data:',blogs)
   return 1
 }
 

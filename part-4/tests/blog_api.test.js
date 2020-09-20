@@ -17,69 +17,74 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
+describe('when there is initially some notes saved', () => {
 
-test('correct amount of blogs are returned as json', async () => {
-  const response =await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+  test('correct amount of blogs are returned as json', async () => {
+    const response = await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
+  })
 
-  expect(response.body).toHaveLength(helper.initialBlogs.length)
-})
+  test('blogs unique identification parameter should be id', async () => {
+    const response =await api.get('/api/blogs')
 
-test('blogs unique identification parameter should be id', async () => {
-  const response =await api.get('/api/blogs')
-
-  let index = 0
-  while (index<response.body.length){
-    expect(response.body[index].id).toBeDefined()
-    index++
-  }
-
-})
-
-test('A blog with correct contents is created', async () => {
-  const newBlog = new Blog({ title:'Useless Jargon',author:'Timothy Tim',url:'Timothy_Tim.com',likes:122 })
-
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(200)
-    .expect('content-type',/application\/json/)
-
-  const response = await api.get('/api/blogs')
-  const contentsTitle = response.body.map(blog => blog.title)
-  const contentsAuthor = response.body.map(blog => blog.author)
-  const contentsUrl = response.body.map(blog => blog.url)
-
-  expect(response.body).toHaveLength(initialBlogs.length+1)
-  expect(contentsTitle).toContain('Useless Jargon')
-  expect(contentsAuthor).toContain('Timothy Tim')
-  expect(contentsUrl).toContain('Timothy_Tim.com')
-})
-
-test('when blog without likes created, default should be 0', async () => {
-  const newBlog = new Blog({ title:'Useless Jargon',author:'Timothy Tim',url:'Timothy_Tim.com' })
-
-  const blog = await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(200)
-    .expect('content-type',/application\/json/)
-
-  const response = await api.get(`/api/blogs/${blog.body.id}`)
-
-  expect(response.body.likes).toBe(0)
+    let index = 0
+    while (index<response.body.length){
+      expect(response.body[index].id).toBeDefined()
+      index++
+    }
+  })
 
 })
 
-test('when blog without title or url created, status code should be 400 Bad request', async () => {
-  const newBlog = new Blog({ title:'Useless Jargon',likes:11 })
+describe ('when blogs are being created', () => {
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(400)
+  test('A blog with correct contents is created', async () => {
+    const newBlog = new Blog({ title:'Useless Jargon',author:'Timothy Tim',url:'Timothy_Tim.com',likes:122 })
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(200)
+      .expect('content-type',/application\/json/)
+
+    const response = await api.get('/api/blogs')
+    const contentsTitle = response.body.map(blog => blog.title)
+    const contentsAuthor = response.body.map(blog => blog.author)
+    const contentsUrl = response.body.map(blog => blog.url)
+
+    expect(response.body).toHaveLength(initialBlogs.length+1)
+    expect(contentsTitle).toContain('Useless Jargon')
+    expect(contentsAuthor).toContain('Timothy Tim')
+    expect(contentsUrl).toContain('Timothy_Tim.com')
+  })
+
+  test('when blog without likes created, default should be 0', async () => {
+    const newBlog = new Blog({ title:'Useless Jargon',author:'Timothy Tim',url:'Timothy_Tim.com' })
+
+    const blog = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(200)
+      .expect('content-type',/application\/json/)
+
+    const response = await api.get(`/api/blogs/${blog.body.id}`)
+
+    expect(response.body.likes).toBe(0)
+
+  })
+
+  test('when blog without title or url created, status code should be 400 Bad request', async () => {
+    const newBlog = new Blog({ title:'Useless Jargon',likes:11 })
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+
+  })
 
 })
 
