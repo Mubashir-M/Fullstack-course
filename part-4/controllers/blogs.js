@@ -1,6 +1,8 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+
 
 blogsRouter.get('/', async (request, response) => {
 
@@ -12,8 +14,13 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
 
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or ivalid' })
+  }
+
   const user = await User.findById(body.userId)
-  console.log('here is wwhat is found for given id', user)
 
   const blog = new Blog ({
     title:body.title,
@@ -40,8 +47,26 @@ blogsRouter.get('/:id', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request,response) => {
-  await Blog.findByIdAndRemove(request.params.id)
-  response.status(204).end()
+
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or ivalid' })
+  }
+
+  const blog = await Blog.findById(request.params.id)
+  console.log('here is decodedtoken: ' , decodedToken)
+  console.log('blog user id is: ', blog.user.toString())
+  console.log('token user id is: ', decodedToken.id.toString())
+
+  if (blog.user.toString() === decodedToken.id.toString() ){
+    await Blog.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+
+  } else {
+    return response.status(401).json({ error: 'User is not the creator of this content and thus not authorized to remove it.' })
+  }
+
 })
 
 blogsRouter.put('/:id', async (request,response) => {
