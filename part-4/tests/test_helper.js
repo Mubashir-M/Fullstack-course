@@ -6,13 +6,15 @@ const initialBlogs = [
     title: 'Tom Thom',
     author: 'Thomas',
     url : 'Thom.com',
-    likes : 110
+    likes : 110,
+    userId: '5f85ddcf5949a026280df355'
   },
   {
     title: 'Sam Sams',
     author: 'Sams',
     url : 'Sam.com',
-    likes : 10
+    likes : 10,
+    userId: '5f85ddcf5949a026280df355'
   }
 ]
 
@@ -33,6 +35,8 @@ const usersInDb = async () => {
   const users = await User.find({})
   return users.map(u => u.toJSON())
 }
+
+
 
 module.exports = {
   initialBlogs,

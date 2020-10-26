@@ -1,11 +1,11 @@
-POST http://localhost:3003/api/blogs
+POST http://localhost:3000/api/blogs
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1sdXVra2FpIiwiaWQiOiI1ZjdkNjYyNmE5MGJlYTAwOWMzZjcxYjkiLCJpYXQiOjE2MDI1MjM3MzF9.VdH2kQg9S_frlRdBCk5hxlK2VY5dbG4UgQNB43fy1eg
 
 {
-  "title" : "The title after getTokenFrom is refractored444", 
-  "author": "M.Mshr5",
-  "url" : "Fifth-try.com",
-  "likes": 23,
+  "title" : "The title after getTokenFrom is refractored888", 
+  "author": "M.Mshr8",
+  "url" : "Fifth8-try.com",
+  "likes": 2348,
   "userId":"5f7d6626a90bea009c3f71b9"
 }
