@@ -1,2 +1,6 @@
 node_modules
 .env
+create_blog.rest
+create_login.rest
+create_user.rest
+delete_blog.rest
