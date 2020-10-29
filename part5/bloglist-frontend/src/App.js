@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
+//import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
-
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
+// create newNote/Cancel for visibility when logged in###
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -15,6 +17,8 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
   const [user, setUser] = useState(null)
+  //const [createVisible, setCreateVisible] = useState(false)
+
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -111,10 +115,24 @@ const App = () => {
       </div>
   )
 
-  const blogForm = () => (
-    <div>
+  /*const blogForm = () => {
+
+    const hideWhenVisible = { display: createVisible ? 'none' : '' }
+    const showWhenVisible = { display: createVisible ? '' : 'none' }
+
+    return (
+      <div>
       <h2>blogs</h2>
       <h4>{user.name} has logged in <button onClick = {handleLogOut}>logout</button></h4>
+      
+      <div style = {hideWhenVisible}>
+        <button onClick = {() => setCreateVisible(true)}>new blog</button>
+        {blogs.map(blog =>
+        <Blog key={blog.id} blog={blog} />
+      )}
+      </div>
+        
+      <div style = {showWhenVisible}>
       <h2>create new</h2>
       <form onSubmit = {createBlog}>
           <div>
@@ -146,17 +164,45 @@ const App = () => {
           </div>
           <button type = 'submit'>create</button>
         </form>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+        <button onClick = {() => setCreateVisible(false)}>cancel</button>
+      </div>
+      
     </div>
+    )
+  }*/
+
+  const blogForm = () => (
+    <Togglable buttonLabel ='new blog' blogs = {blogs}>
+      <BlogForm
+        user = {user}
+        title = {title}
+        author = {author}
+        url = {url}
+        blogs = {blogs}
+        setTitle = {setTitle}
+        setAuthor = {setAuthor}
+        setUrl = {setUrl}
+        setBlogs = {setBlogs}
+        createBlog = {createBlog}
+        handleLogout = {handleLogOut}
+      />
+    </Togglable>
   )
+    
+  
 
   return (
     <div>
 
     <Notification errorMessage={errorMessage} successMessage ={successMessage} />
-    {user === null ? loginForm() : blogForm()}
+    {user === null ? 
+    loginForm() : 
+    <div>
+      <h2>blogs</h2>
+      <h4>{user.name} has logged in <button onClick = {handleLogOut}>logout</button></h4>
+      {blogForm()}
+    </div>
+    }
 
     </div>
   )
