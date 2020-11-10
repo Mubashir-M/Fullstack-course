@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-//import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-// create newNote/Cancel for visibility when logged in###
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -17,7 +16,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
   const [user, setUser] = useState(null)
-  //const [createVisible, setCreateVisible] = useState(false)
+
 
 
   const handleLogin = async (event) => {
@@ -115,64 +114,9 @@ const App = () => {
       </div>
   )
 
-  /*const blogForm = () => {
-
-    const hideWhenVisible = { display: createVisible ? 'none' : '' }
-    const showWhenVisible = { display: createVisible ? '' : 'none' }
-
-    return (
-      <div>
-      <h2>blogs</h2>
-      <h4>{user.name} has logged in <button onClick = {handleLogOut}>logout</button></h4>
-      
-      <div style = {hideWhenVisible}>
-        <button onClick = {() => setCreateVisible(true)}>new blog</button>
-        {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
-      </div>
-        
-      <div style = {showWhenVisible}>
-      <h2>create new</h2>
-      <form onSubmit = {createBlog}>
-          <div>
-            title:
-            <input
-            type = "text"
-            value = {title}
-            name = "Title"
-            onChange = {({target}) => setTitle(target.value)}
-            />
-          </div>
-          <div>
-            author:
-            <input
-            type = "text"
-            value = {author}
-            name = "Author"
-            onChange = {({target}) => setAuthor(target.value)}
-            />
-          </div>
-          <div>
-            url:
-            <input
-            type = "text"
-            value = {url}
-            name = "Url"
-            onChange = {({target}) => setUrl(target.value)}
-            />
-          </div>
-          <button type = 'submit'>create</button>
-        </form>
-        <button onClick = {() => setCreateVisible(false)}>cancel</button>
-      </div>
-      
-    </div>
-    )
-  }*/
-
+ 
   const blogForm = () => (
-    <Togglable buttonLabel ='new blog' blogs = {blogs}>
+    <Togglable buttonLabel ='new blog' blogs = {blogs} >
       <BlogForm
         user = {user}
         title = {title}
@@ -185,6 +129,8 @@ const App = () => {
         setBlogs = {setBlogs}
         createBlog = {createBlog}
         handleLogout = {handleLogOut}
+        successMessage= {successMessage}
+        errorMessage= {errorMessage}
       />
     </Togglable>
   )

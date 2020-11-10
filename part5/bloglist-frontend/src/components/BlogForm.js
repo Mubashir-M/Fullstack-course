@@ -3,7 +3,7 @@ import React from 'react'
 const BlogForm = ({
   user, title, author, url, blogs,
   setTitle, setAuthor, setUrl, setBlogs,
-  createBlog,handleLogOut,
+  createBlog,handleLogOut
 }) => {
 
   return (

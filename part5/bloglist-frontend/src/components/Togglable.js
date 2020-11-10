@@ -15,8 +15,9 @@ const Togglable = (props) => {
     <div>
       <div style={hideWhenVisible}>
         <button onClick={toggleVisibility}>{props.buttonLabel}</button>
-        {props.blogs.map(blog =>
+        {props.blogs.sort((blog1,blog2) => blog2.likes-blog1.likes).map(blog =>
         <Blog key={blog.id} blog={blog} />
+        
       )}
       </div>
       <div style={showWhenVisible}>
