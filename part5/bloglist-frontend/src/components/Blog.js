@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import blogService from '../services/blogs'
 
-const Blog = ({ blog}) => {
+
+const Blog = ({ blog, user, likesUpdate, removeBlog }) => {
   const [viewVisible, setViewVisible] = useState(false)
   const hideWhenVisible = { display: viewVisible ? 'none' : '' }
   const showWhenVisible = { display: viewVisible ? '' : 'none' }
-
+  
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -14,23 +14,14 @@ const Blog = ({ blog}) => {
     marginBottom: 5
   }
 
-  const likesUpdate = () => {
+ 
+
+  const checkAuthorization = () => {
+     
+      if (blog.user.username === user.username) {
+        return <button onClick = {() => removeBlog(blog)}>remove</button>
+      }
     
-    const newBlog = {
-      title : blog.title,
-      author: blog.author,
-      url : blog.url,
-      likes: blog.likes+1,
-      user:blog.user.id,
-      id: blog.id
-      
-    }
-    
-    blogService
-      .update(newBlog)
-      .then(returnedBlog => {
-        
-      })       
   }
   
   return(
@@ -44,9 +35,9 @@ const Blog = ({ blog}) => {
         {blog.title} {blog.author}
         <button onClick= {() => setViewVisible(false)}>hide</button><br/>
         {blog.url}<br/>
-        {`likes ${blog.likes}`} <button onClick= {likesUpdate}>like</button><br/>
-        {blog.user.name}
-
+        {`likes ${blog.likes}`} <button onClick= {() => likesUpdate(blog)}>like</button><br/>
+        {blog.user.name}<br/>
+        { checkAuthorization()}
       </div>
    </div> 
   

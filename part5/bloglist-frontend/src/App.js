@@ -16,8 +16,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [successMessage, setSuccessMessage] = useState(null)
   const [user, setUser] = useState(null)
-
-
+ 
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -72,6 +71,12 @@ const App = () => {
       })        
   }
 
+  const updateBlogs = () => {
+    blogService.getAll().then(blogs =>
+      setBlogs( blogs )
+    ) 
+  }
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -114,9 +119,65 @@ const App = () => {
       </div>
   )
 
+  const likesUpdate = async (blog) => {
+
+    try {
+      const newBlog = {
+        title : blog.title,
+        author: blog.author,
+        url : blog.url,
+        likes: blog.likes+1,
+        user:blog.user.id,
+        id: blog.id
+        
+      }
+      
+      await blogService
+        .update(newBlog)
+        .then(returnedBlog => {
+          setSuccessMessage(`Incremented like count for blog ${blog.title} to ${blog.likes}`)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
+          
+        })
+        updateBlogs()
+    } catch (error) {
+      setErrorMessage(error)
+        console.log(error)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+    }
+       
+  }
+
+  const removeBlog = (blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
+      const removedBlog = blog
+      try{
+          blogService
+          .remove(blog)
+          .then(returnedBlog => {
+            updateBlogs()
+            })
+          setSuccessMessage(`removed blog ${removedBlog.title} `)
+          setTimeout(() => {
+            setSuccessMessage(null)
+          }, 5000)
+        } catch (error){
+          setErrorMessage(error)
+          console.log(error)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        }
+    }
+  }
+ 
  
   const blogForm = () => (
-    <Togglable buttonLabel ='new blog' blogs = {blogs} >
+    <Togglable buttonLabel ='new blog' blogs = {blogs} user = {user} likesUpdate = {likesUpdate} removeBlog = {removeBlog} >
       <BlogForm
         user = {user}
         title = {title}
@@ -139,7 +200,7 @@ const App = () => {
 
   return (
     <div>
-
+      
     <Notification errorMessage={errorMessage} successMessage ={successMessage} />
     {user === null ? 
     loginForm() : 
