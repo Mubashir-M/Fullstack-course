@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-
+import React, { useState } from 'react'
 
 const Blog = ({ blog, user, likesUpdate, removeBlog }) => {
   const [viewVisible, setViewVisible] = useState(false)
   const hideWhenVisible = { display: viewVisible ? 'none' : '' }
   const showWhenVisible = { display: viewVisible ? '' : 'none' }
-  
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -14,24 +13,22 @@ const Blog = ({ blog, user, likesUpdate, removeBlog }) => {
     marginBottom: 5
   }
 
- 
-
   const checkAuthorization = () => {
-     
-      if (blog.user.username === user.username) {
-        return <button onClick = {() => removeBlog(blog)}>remove</button>
-      }
-    
+
+    if (blog.user.username === user.username) {
+      return <button onClick = {() => removeBlog(blog)}>remove</button>
+    }
+
   }
-  
+
   return(
-   <div>
-     <div style={{...blogStyle, ...hideWhenVisible}}>
-        {blog.title} {blog.author} 
+    <div>
+      <div style={{ ...blogStyle, ...hideWhenVisible }}>
+        {blog.title} {blog.author}
         <button onClick= {() => setViewVisible(true)}>view</button>
       </div>
-      <div style = {{...blogStyle, ...showWhenVisible}}>
-      
+      <div style = {{ ...blogStyle, ...showWhenVisible }}>
+
         {blog.title} {blog.author}
         <button onClick= {() => setViewVisible(false)}>hide</button><br/>
         {blog.url}<br/>
@@ -39,8 +36,7 @@ const Blog = ({ blog, user, likesUpdate, removeBlog }) => {
         {blog.user.name}<br/>
         { checkAuthorization()}
       </div>
-   </div> 
-  
-)}
+    </div>
+  )}
 
 export default Blog

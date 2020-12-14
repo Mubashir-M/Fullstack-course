@@ -1,44 +1,44 @@
 import React from 'react'
 
 const BlogForm = ({
-  user, title, author, url, blogs,
-  setTitle, setAuthor, setUrl, setBlogs,
-  createBlog,handleLogOut
+  title, author, url,
+  setTitle, setAuthor, setUrl,
+  createBlog
 }) => {
 
   return (
     <div>
       <h2>create new</h2>
       <form onSubmit = {createBlog}>
-          <div>
+        <div>
             title:
-            <input
+          <input
             type = "text"
             value = {title}
             name = "Title"
-            onChange = {({target}) => setTitle(target.value)}
-            />
-          </div>
-          <div>
+            onChange = {({ target }) => setTitle(target.value)}
+          />
+        </div>
+        <div>
             author:
-            <input
+          <input
             type = "text"
             value = {author}
             name = "Author"
-            onChange = {({target}) => setAuthor(target.value)}
-            />
-          </div>
-          <div>
+            onChange = {({ target }) => setAuthor(target.value)}
+          />
+        </div>
+        <div>
             url:
-            <input
+          <input
             type = "text"
             value = {url}
             name = "Url"
-            onChange = {({target}) => setUrl(target.value)}
-            />
-          </div>
-          <button type = 'submit'>create</button>
-        </form>
+            onChange = {({ target }) => setUrl(target.value)}
+          />
+        </div>
+        <button type = 'submit'>create</button>
+      </form>
     </div>
   )
 }
