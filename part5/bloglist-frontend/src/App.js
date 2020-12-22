@@ -5,6 +5,7 @@ import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
+import Blog from './components/Blog'
 
 
 const App = () => {
@@ -95,8 +96,9 @@ const App = () => {
 
 
 
-  const likesUpdate = async (blog) => {
-
+  const likesUpdate = async (event) => {
+    event.preventDefault()
+    const blog = blogs.find(blog => blog.id === event.target.value)
     try {
       const newBlog = {
         title : blog.title,
@@ -129,7 +131,10 @@ const App = () => {
 
   }
 
-  const removeBlog = (blog) => {
+  const removeBlog = (event) => {
+    event.preventDefault()
+    const blog = blogs.find(blog => blog.id === event.target.value)
+
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)){
       const removedBlog = blog
       try{
@@ -160,9 +165,9 @@ const App = () => {
         title = {title}
         author = {author}
         url = {url}
-        setTitle = {setTitle}
-        setAuthor = {setAuthor}
-        setUrl = {setUrl}
+        changeTitle = { (event) => setTitle (event.target.value)}
+        changeAuthor = { (event) => setAuthor (event.target.value)}
+        changeUrl = { (event) => setUrl (event.target.value)}
         createBlog = {createBlog}
         successMessage= {successMessage}
         errorMessage= {errorMessage}
@@ -176,15 +181,16 @@ const App = () => {
 
       <Notification errorMessage={errorMessage} successMessage ={successMessage} />
       {user === null ?
-        <LoginForm setUsername = {setUsername} setPassword = {setPassword} handleLogin = {handleLogin}
-          username = {username} password = {password}/> :
+        <LoginForm setUsername = {setUsername} setPassword = {setPassword} handleLogin = {handleLogin} username = {username} password = {password}/> :
         <div>
           <h2>blogs</h2>
           <h4>{user.name} has logged in <button onClick = {handleLogOut}>logout</button></h4>
           {blogForm()}
+          {blogs.sort((blog1,blog2) => blog2.likes-blog1.likes).map(blog =>
+            <Blog key={blog.id} blog={blog} user = {user} likesUpdate =  {likesUpdate} removeBlog = {removeBlog}/>)
+          }
         </div>
       }
-
     </div>
   )
 

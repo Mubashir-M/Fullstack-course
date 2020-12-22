@@ -13,26 +13,27 @@ const Blog = ({ blog, user, likesUpdate, removeBlog }) => {
     marginBottom: 5
   }
 
+
   const checkAuthorization = () => {
 
     if (blog.user.username === user.username) {
-      return <button onClick = {() => removeBlog(blog)}>remove</button>
+      return <button onClick = {removeBlog} value = {blog.id}>remove</button>
     }
 
   }
 
   return(
-    <div>
-      <div style={{ ...blogStyle, ...hideWhenVisible }}>
-        {blog.title} {blog.author}
+    <div className= 'blog'>
+      <div className= 'partialBlog' style={{ ...blogStyle, ...hideWhenVisible }}>
+        {blog.title} by {blog.author}
         <button onClick= {() => setViewVisible(true)}>view</button>
       </div>
-      <div style = {{ ...blogStyle, ...showWhenVisible }}>
+      <div className = 'fullBlog' style = {{ ...blogStyle, ...showWhenVisible }}>
 
-        {blog.title} {blog.author}
+        {blog.title} by {blog.author}
         <button onClick= {() => setViewVisible(false)}>hide</button><br/>
         {blog.url}<br/>
-        {`likes ${blog.likes}`} <button onClick= {() => likesUpdate(blog)}>like</button><br/>
+        {`likes ${blog.likes}`} <button onClick= {likesUpdate} value = {blog.id}>like</button><br/>
         {blog.user.name}<br/>
         { checkAuthorization()}
       </div>

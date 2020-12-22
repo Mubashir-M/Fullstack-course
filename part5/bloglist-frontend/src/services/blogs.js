@@ -1,7 +1,7 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 // eslint-disable-next-line no-unused-vars
-let token = null 
+let token = null
 
 const setToken = newToken => {
   token = `bearer ${newToken}`
@@ -21,7 +21,7 @@ const create = async newBlog => {
 }
 
 const update = async newBlog => {
-  
+
   const response = await axios.put(`${baseUrl}/${newBlog.id}`, newBlog)
   return response.data
 }
@@ -34,4 +34,4 @@ const remove = async blog => {
   return response.data
 }
 
-export default { getAll , create, setToken, update, remove}
+export default { getAll , create, setToken, update, remove }

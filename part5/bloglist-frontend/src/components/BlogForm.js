@@ -2,9 +2,10 @@ import React from 'react'
 
 const BlogForm = ({
   title, author, url,
-  setTitle, setAuthor, setUrl,
+  changeTitle, changeAuthor, changeUrl,
   createBlog
 }) => {
+
 
   return (
     <div>
@@ -13,28 +14,31 @@ const BlogForm = ({
         <div>
             title:
           <input
+            id = 'title'
             type = "text"
             value = {title}
             name = "Title"
-            onChange = {({ target }) => setTitle(target.value)}
+            onChange = { changeTitle }
           />
         </div>
-        <div>
+        <div className = 'author'>
             author:
           <input
+            id = 'author'
             type = "text"
             value = {author}
             name = "Author"
-            onChange = {({ target }) => setAuthor(target.value)}
+            onChange = { changeAuthor }
           />
         </div>
-        <div>
+        <div className = 'url'>
             url:
           <input
+            id = 'url'
             type = "text"
             value = {url}
             name = "Url"
-            onChange = {({ target }) => setUrl(target.value)}
+            onChange = { changeUrl }
           />
         </div>
         <button type = 'submit'>create</button>
