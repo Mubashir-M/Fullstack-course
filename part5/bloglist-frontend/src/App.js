@@ -40,7 +40,7 @@ const App = () => {
         setSuccessMessage(null)
       }, 5000)
     } catch (exception) {
-      setErrorMessage('wrong username of password')
+      setErrorMessage('wrong username or password')
       console.log(errorMessage)
       setTimeout(() => {
         setErrorMessage(null)
@@ -113,7 +113,7 @@ const App = () => {
       await blogService
         .update(newBlog)
         .then((returnedBlog) => {
-          setSuccessMessage(`Incremented like count for blog ${blog.title} to ${blog.likes}`)
+          setSuccessMessage(`Incremented like count for blog ${blog.title} to ${blog.likes + 1}`)
           console.log(returnedBlog)
           setTimeout(() => {
             setSuccessMessage(null)
